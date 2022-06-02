@@ -79,8 +79,9 @@ def graph_best_inital_bet(possible_bets, num_of_simulations):
     average_games_played = [result[3] for result in results]
     plt.xlabel("Initial Bet")
     plt.ylabel("Average Roulette Games Played")
+    plt.yscale('log')
     plt.title('Average Games Played with {} Simulations'.format(num_of_simulations))
-    plt.plot(possible_bets, average_final_winnings)
+    plt.plot(possible_bets, average_games_played)
     plt.show()
     return results
 
@@ -99,5 +100,5 @@ if __name__ == '__main__':
                                                      average_games_played))
 
     possible_bets = [1, 2, 5, 10, 25, 50, 100, 150, 200]
-    results = graph_best_inital_bet(possible_bets, 10000)
+    results = graph_best_inital_bet(possible_bets, 10000000)
 
