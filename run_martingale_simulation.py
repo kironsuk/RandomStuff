@@ -1,4 +1,5 @@
 import random as rand
+from matplotlib import pyplot as plt
 
 MAX_BET = 2000
 MAX_WIN = 2000
@@ -52,12 +53,40 @@ def run_simulations(initial_bet, num_of_simulations):
     average_games_played = total_games_played * 1.0 / num_of_simulations
     return [chance_to_win, average_return, average_games_played]
 
+def find_best_initial_bet(possible_bets, num_of_simulations):
+    results = []
+    for bet in possible_bets:
+        [chance_to_win, average_return, average_games_played] = run_simulations(bet, num_of_simulations)
+        results.append([bet, chance_to_win, average_return, average_games_played])
+    return results
 
+def graph_best_inital_bet(possible_bets, num_of_simulations):
+    results = find_best_initial_bet(possible_bets, 1000)
+    chances = [result[1] for result in results]
+    plt.xlabel("Initial Bet")
+    plt.ylabel("Win Chance")
+    plt.title('Win Chance with {} Simulations'.format(num_of_simulations))
+    plt.plot(possible_bets, chances)
+    plt.show()
 
+    average_final_winnings = [result[2] for result in results]
+    plt.xlabel("Initial Bet")
+    plt.ylabel("Average Final Winnings ($)")
+    plt.title('Average Winnings with {} Simulations'.format(num_of_simulations))
+    plt.plot(possible_bets, average_final_winnings)
+    plt.show()
+
+    average_games_played = [result[3] for result in results]
+    plt.xlabel("Initial Bet")
+    plt.ylabel("Average Roulette Games Played")
+    plt.title('Average Games Played with {} Simulations'.format(num_of_simulations))
+    plt.plot(possible_bets, average_final_winnings)
+    plt.show()
+    return results
 
 if __name__ == '__main__':
     initial_bet = 100
-    number_of_simulations = 10
+    number_of_simulations = 100
     print("Running {} simluations".format(number_of_simulations))
     [chance_to_win, average_return, average_games_played] \
         = run_simulations(initial_bet, number_of_simulations)
@@ -68,3 +97,7 @@ if __name__ == '__main__':
                                                      chance_to_win * 100,
                                                      average_return,
                                                      average_games_played))
+
+    possible_bets = [1, 2, 5, 10, 25, 50, 100, 150, 200]
+    results = graph_best_inital_bet(possible_bets, 10000)
+
