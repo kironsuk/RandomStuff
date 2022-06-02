@@ -1,4 +1,6 @@
 import random as rand
+import time
+
 from matplotlib import pyplot as plt
 
 MAX_BET = 2000
@@ -19,7 +21,7 @@ def martingale_roulette(initial_bet, current_winnings):
     win_martingale = False
     while current_winnings < MAX_WIN and current_winnings > MAX_LOSE and current_bet < MAX_BET:
         current_winnings -= current_bet
-        [win, reward] = play_roulette(current_bet, BLACK_JACK_WIN_PERCENTAGE)
+        [win, reward] = play_roulette(current_bet)
         iterations += 1
         current_winnings += reward
         if win:
@@ -59,7 +61,10 @@ def run_simulations(initial_bet, num_of_simulations):
 def find_best_initial_bet(possible_bets, num_of_simulations):
     results = []
     for bet in possible_bets:
+        print("starting simulation for bet size ", bet)
+        start_time = time.time()
         [chance_to_win, average_return, average_games_played] = run_simulations(bet, num_of_simulations)
+        print("Finished simulation for bet size {}, took {} seconds", bet, time.time()-start_time)
         results.append([bet, chance_to_win, average_return, average_games_played])
     return results
 
