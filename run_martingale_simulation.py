@@ -4,6 +4,7 @@ from matplotlib import pyplot as plt
 MAX_BET = 2000
 MAX_WIN = 2000
 MAX_LOSE = -2000
+BLACK_JACK_WIN_PERCENTAGE = .495
 
 
 def play_roulette(bet_amount, win_percent=.4637, reward_odds=2):
@@ -18,7 +19,7 @@ def martingale_roulette(initial_bet, current_winnings):
     win_martingale = False
     while current_winnings < MAX_WIN and current_winnings > MAX_LOSE and current_bet < MAX_BET:
         current_winnings -= current_bet
-        [win, reward] = play_roulette(current_bet)
+        [win, reward] = play_roulette(current_bet, BLACK_JACK_WIN_PERCENTAGE)
         iterations += 1
         current_winnings += reward
         if win:
@@ -29,13 +30,15 @@ def martingale_roulette(initial_bet, current_winnings):
     return [current_winnings, win_martingale, iterations]
 
 
-def run_simulation(initial_bet, current_winnings=0):
+def run_simulation(initial_bet, current_winnings=0, max_games_played=1000):
     simulation_timeline = []
     games_played = 0
     while current_winnings < MAX_WIN and current_winnings > MAX_LOSE:
         [current_winnings, win, iterations] = martingale_roulette(initial_bet, current_winnings)
         simulation_timeline.append([win, iterations])
         games_played += iterations
+        if games_played > max_games_played:
+            break
     return [current_winnings, games_played, current_winnings >= MAX_WIN, simulation_timeline]
 
 
@@ -61,7 +64,7 @@ def find_best_initial_bet(possible_bets, num_of_simulations):
     return results
 
 def graph_best_inital_bet(possible_bets, num_of_simulations):
-    results = find_best_initial_bet(possible_bets, 1000)
+    results = find_best_initial_bet(possible_bets, num_of_simulations)
     chances = [result[1] for result in results]
     plt.xlabel("Initial Bet")
     plt.ylabel("Win Chance")
@@ -86,8 +89,9 @@ def graph_best_inital_bet(possible_bets, num_of_simulations):
     return results
 
 if __name__ == '__main__':
-    initial_bet = 100
-    number_of_simulations = 10000000
+    # initial_bet = 15
+    number_of_simulations = 1000000
+    print(run_simulations(15, number_of_simulations))
     # print("Running {} simluations".format(number_of_simulations))
     # [chance_to_win, average_return, average_games_played] \
     #     = run_simulations(initial_bet, number_of_simulations)
