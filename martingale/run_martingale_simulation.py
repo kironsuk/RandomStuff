@@ -61,10 +61,10 @@ def run_simulations(initial_bet, num_of_simulations):
 def find_best_initial_bet(possible_bets, num_of_simulations):
     results = []
     for bet in possible_bets:
-        print("starting simulation for bet size ", bet)
+        print("starting simulation for bet size ".format(bet))
         start_time = time.time()
         [chance_to_win, average_return, average_games_played] = run_simulations(bet, num_of_simulations)
-        print("Finished simulation for bet size {}, took {} seconds", bet, time.time()-start_time)
+        print("Finished simulation for bet size {}, took {} seconds".format(bet, time.time()-start_time))
         results.append([bet, chance_to_win, average_return, average_games_played])
     return results
 
@@ -93,31 +93,22 @@ def graph_best_inital_bet(possible_bets, num_of_simulations):
     plt.show()
     return results
 
+def run_one_set_of_simulations_and_print(initial_bet, num_of_simulations):
+    [chance_to_win, average_return, average_games_played] \
+        = run_simulations(initial_bet, number_of_simulations)
+    print("Ran {} simulations. \n"
+          "Won {} percent of the time. \n"
+          "Average Return is {}. \n"
+          "Average number of games played {}".format(number_of_simulations,
+                                                     chance_to_win * 100,
+                                                     average_return,
+                                                     average_games_played))
+
 if __name__ == '__main__':
-    # initial_bet = 15
     number_of_simulations = 1000000
     print(run_simulations(15, number_of_simulations))
-    # print("Running {} simluations".format(number_of_simulations))
-    # [chance_to_win, average_return, average_games_played] \
-    #     = run_simulations(initial_bet, number_of_simulations)
-    # print("Ran {} simulations. \n"
-    #       "Won {} percent of the time. \n"
-    #       "Average Return is {}. \n"
-    #       "Average number of games played {}".format(number_of_simulations,
-    #                                                  chance_to_win * 100,
-    #                                                  average_return,
-    #                                                  average_games_played))
 
     possible_bets = [1, 2, 5, 10, 25, 50, 100, 150, 200]
     results = graph_best_inital_bet(possible_bets, number_of_simulations)
-    # print("checking wins and loses ")
-    # # print(run_simulation(50, 100000))
-    # win_lose = []
-    # wins = 0
-    # for i in range(number_of_simulations):
-    #     [win, reward] = play_roulette(initial_bet)
-    #     wins += win
-
-    # print("Win percentage ", (wins * 1.0 / number_of_simulations) );
 
 
